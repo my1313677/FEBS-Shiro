@@ -6,14 +6,11 @@ import cc.mrbird.common.util.IPUtils;
 import cc.mrbird.system.domain.SysLog;
 import cc.mrbird.system.domain.User;
 import cc.mrbird.system.service.LogService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,8 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class LogAspect {
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private FebsProperties febsProperties;
 
@@ -44,15 +39,11 @@ public class LogAspect {
     }
 
     @Around("pointcut()")
-    public Object around(ProceedingJoinPoint point) throws JsonProcessingException {
+    public Object around(ProceedingJoinPoint point) throws Throwable {
         Object result = null;
         long beginTime = System.currentTimeMillis();
-        try {
-            // 执行方法
-            result = point.proceed();
-        } catch (Throwable e) {
-            log.error(e.getMessage());
-        }
+        // 执行方法
+        result = point.proceed();
         // 获取request
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         // 设置IP地址

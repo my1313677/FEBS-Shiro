@@ -136,6 +136,3 @@ Spring Security版本已发布：[https://github.com/wuyouzhuguli/FEBS-Security]
 ![2bd554ce2511cd1e7e3e7b3b56216ed6.png](http://olwqftdzl.bkt.clouddn.com/18-4-18/86512301.jpg)
 
 ![5e6d35e4390cf7f0752d7864ad701e2b.png](http://olwqftdzl.bkt.clouddn.com/18-4-18/81830531.jpg)
-
-### 反馈交流
-![](http://olwqftdzl.bkt.clouddn.com/18-9-18/77785846.jpg)

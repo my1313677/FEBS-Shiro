@@ -2,7 +2,7 @@ package cc.mrbird.system.service.impl;
 
 import cc.mrbird.common.annotation.Log;
 import cc.mrbird.common.service.impl.BaseService;
-import cc.mrbird.common.util.AddressUtils;
+import cc.mrbird.common.util.AddressUtil;
 import cc.mrbird.system.domain.SysLog;
 import cc.mrbird.system.service.LogService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -91,12 +91,12 @@ public class LogServiceImpl extends BaseService<SysLog> implements LogService {
             log.setParams(params.toString());
         }
         log.setCreateTime(new Date());
-        log.setLocation(AddressUtils.getCityInfo(log.getIp()));
+        log.setLocation(AddressUtil.getCityInfo(log.getIp()));
         // 保存系统日志
         save(log);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     private StringBuilder handleParams(StringBuilder params, Object[] args, List paramNames) throws JsonProcessingException {
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof Map) {

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@SuppressWarnings("unchecked")
+@SuppressWarnings("all")
 public class WebConfig {
 
     /**

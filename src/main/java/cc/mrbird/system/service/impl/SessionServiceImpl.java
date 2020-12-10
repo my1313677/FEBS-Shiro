@@ -1,6 +1,6 @@
 package cc.mrbird.system.service.impl;
 
-import cc.mrbird.common.util.AddressUtils;
+import cc.mrbird.common.util.AddressUtil;
 import cc.mrbird.system.domain.User;
 import cc.mrbird.system.domain.UserOnline;
 import cc.mrbird.system.service.SessionService;
@@ -54,7 +54,7 @@ public class SessionServiceImpl implements SessionService {
             userOnline.setLastAccessTime(session.getLastAccessTime());
             long timeout = session.getTimeout();
             userOnline.setStatus(timeout == 0L ? "0" : "1");
-            String address = AddressUtils.getCityInfo(userOnline.getHost());
+            String address = AddressUtil.getCityInfo(userOnline.getHost());
             userOnline.setLocation(address);
             userOnline.setTimeout(timeout);
             list.add(userOnline);

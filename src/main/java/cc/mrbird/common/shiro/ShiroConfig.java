@@ -20,12 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.Base64Utils;
 
 import javax.servlet.Filter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * Shiro 配置类
@@ -50,6 +49,9 @@ public class ShiroConfig {
     @Value("${spring.redis.timeout}")
     private int timeout;
 
+    @Value("${spring.redis.database:0}")
+    private int database;
+
     /**
      * shiro 中配置 redis 缓存
      *
@@ -64,6 +66,7 @@ public class ShiroConfig {
         if (StringUtils.isNotBlank(password))
             redisManager.setPassword(password);
         redisManager.setTimeout(timeout);
+        redisManager.setDatabase(database);
         return redisManager;
     }
 
@@ -75,11 +78,11 @@ public class ShiroConfig {
 
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();        
-        
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+
         Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();//获取filters
-		filters.put("user", new CustomUserFilter());
-		
+        filters.put("user", new CustomUserFilter());
+
         // 设置 securityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 登录的 url
@@ -88,7 +91,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSuccessUrl(febsProperties.getShiro().getSuccessUrl());
         // 未授权 url
         shiroFilterFactoryBean.setUnauthorizedUrl(febsProperties.getShiro().getUnauthorizedUrl());
-		
+
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 设置免认证 url
         String[] anonUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(febsProperties.getShiro().getAnonUrl(), ",");
@@ -146,7 +149,10 @@ public class ShiroConfig {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
         // rememberMe cookie 加密的密钥
-        cookieRememberMeManager.setCipherKey(Base64.decode("4AvVhmFLUs0KTA3Kprsdag=="));
+        String encryptKey = "febs_shiro_key";
+        byte[] encryptKeyBytes = encryptKey.getBytes(StandardCharsets.UTF_8);
+        String rememberKey = Base64Utils.encodeToString(Arrays.copyOf(encryptKeyBytes, 16));
+        cookieRememberMeManager.setCipherKey(Base64.decode(rememberKey));
         return cookieRememberMeManager;
     }
 
